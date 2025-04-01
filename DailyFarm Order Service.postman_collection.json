@@ -1,0 +1,91 @@
+{
+	"info": {
+		"_postman_id": "ff00b689-a18d-410b-b3d1-004f0a6d4f76",
+		"name": "DailyFarm Order Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "40469842"
+	},
+	"item": [
+		{
+			"name": "Create Order",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"customerId\": \"{{customerId}}\",\n  \"surpriseBagId\": \"{{surpriseBagId}}\",\n  \"quantity\": 2\n}"
+				},
+				"url": "{{orderBaseUrl}}/orders"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Order By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{orderBaseUrl}}/orders/{{orderId}}"
+			},
+			"response": [
+				{
+					"name": "Get Order By ID",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": "{{orderBaseUrl}}/orders/{{orderId}}"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 01 Apr 2025 18:05:14 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": \"e1160c7e-e109-48b8-af13-6a42d4e2e2e3\",\n    \"customerId\": \"1e13301f-c7fb-49a3-9557-a586e2e74c59\",\n    \"surpriseBagId\": \"d362fa24-17f4-4d47-b466-f6c047b57bb4\",\n    \"quantity\": 0,\n    \"status\": \"PENDING\",\n    \"createdAt\": \"2025-04-01T20:16:14.199266\",\n    \"updatedAt\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Orders By Customer",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{orderBaseUrl}}/orders/customer/{{customerId}}"
+			},
+			"response": []
+		},
+		{
+			"name": "Cancel Order",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": "{{orderBaseUrl}}/orders/{{orderId}}/cancel"
+			},
+			"response": []
+		}
+	]
+}

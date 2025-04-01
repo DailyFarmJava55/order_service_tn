@@ -23,6 +23,9 @@ public class Order {
 
     @Column(nullable = false)
     private UUID surpriseBagId;
+    
+    @Column(nullable = false)
+    private int quantity;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

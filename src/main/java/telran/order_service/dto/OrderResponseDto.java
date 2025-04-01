@@ -9,6 +9,7 @@ public record OrderResponseDto(
 		  	UUID id,
 	        UUID customerId,
 	        UUID surpriseBagId,
+	        int quantity,
 	        OrderStatus status,
 	        LocalDateTime createdAt,
 	        LocalDateTime updatedAt
