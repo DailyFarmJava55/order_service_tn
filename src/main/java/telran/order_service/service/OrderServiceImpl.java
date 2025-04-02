@@ -1,5 +1,10 @@
 package telran.order_service.service;
 
+import static telran.order_service.api.constants.ErrorCodes.ORDER_ALREADY_CANCELLED;
+import static telran.order_service.api.constants.ErrorCodes.ORDER_NOT_FOUND;
+import static telran.order_service.api.constants.ErrorCodes.SURPRISE_BAG_NOT_AVAILABLE;
+import static telran.order_service.api.constants.ValidationMessages.INVALID_QUANTITY;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -29,10 +34,10 @@ public class OrderServiceImpl implements OrderService {
 		 SurpriseBagResponse surpriseBag = surpriseBagClient.getSurpriseBagById(request.surpriseBagId());
 
 		    if ( surpriseBag.availableCount() <= 0 ) {
-		        throw new IllegalStateException("SurpriseBag is not available for order");
+		        throw new IllegalStateException(SURPRISE_BAG_NOT_AVAILABLE);
 		    }
 		    if (request.quantity() <= 0) {
-		        throw new IllegalArgumentException("Quantity must be greater than zero");
+		        throw new IllegalArgumentException(INVALID_QUANTITY);
 		    }
 		    
 		Order order = Order.builder()
@@ -63,7 +68,7 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public OrderResponseDto getOrderById(UUID orderId) {
 		Order order = orderRepository.findById(orderId)
-				.orElseThrow(() -> new IllegalArgumentException("Order not found"));
+				.orElseThrow(() -> new IllegalArgumentException(ORDER_NOT_FOUND));
 		return mapToResponse(order);
 	}
 	
@@ -83,10 +88,10 @@ public class OrderServiceImpl implements OrderService {
 	 @Transactional
 	 public void cancelOrder(UUID orderId) {
 	     Order order = orderRepository.findById(orderId)
-	             .orElseThrow(() -> new IllegalArgumentException("Order not found"));
+	             .orElseThrow(() -> new IllegalArgumentException(ORDER_NOT_FOUND));
 
 	     if (order.getStatus() == OrderStatus.CANCELLED) {
-	         throw new IllegalStateException("Order is already cancelled");
+	         throw new IllegalStateException(ORDER_ALREADY_CANCELLED);
 	     }
 
 	     order.setStatus(OrderStatus.CANCELLED);

@@ -1,4 +1,4 @@
-package telran.order_service.api;
+package telran.order_service.api.constants;
 
 public interface ApiConstants {
 	

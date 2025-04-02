@@ -1,9 +1,9 @@
 package telran.order_service.controller;
 
-import static telran.order_service.api.ApiConstants.CANCEL_ORDER;
-import static telran.order_service.api.ApiConstants.CREATE_ORDER;
-import static telran.order_service.api.ApiConstants.GET_ORDERS_BY_CUSTOMER;
-import static telran.order_service.api.ApiConstants.GET_ORDER_BY_ID;
+import static telran.order_service.api.constants.ApiConstants.CANCEL_ORDER;
+import static telran.order_service.api.constants.ApiConstants.CREATE_ORDER;
+import static telran.order_service.api.constants.ApiConstants.GET_ORDERS_BY_CUSTOMER;
+import static telran.order_service.api.constants.ApiConstants.GET_ORDER_BY_ID;
 
 import java.util.List;
 import java.util.UUID;
