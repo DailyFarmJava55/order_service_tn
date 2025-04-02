@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import telran.order_service.dao.OrderRepository;
 import telran.order_service.dto.OrderRequestDto;
 import telran.order_service.dto.OrderResponseDto;
@@ -21,6 +22,8 @@ import telran.order_service.dto.SurpriseBagResponse;
 import telran.order_service.feign.SurpriseBagClient;
 import telran.order_service.model.Order;
 import telran.order_service.model.OrderStatus;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
@@ -30,13 +33,17 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	@Transactional
 	public OrderResponseDto createOrder(OrderRequestDto request) {
+		log.info("Creating order: customerId={}, surpriseBagId={}, quantity={}", 
+	             request.customerId(), request.surpriseBagId(), request.quantity());
 		
 		 SurpriseBagResponse surpriseBag = surpriseBagClient.getSurpriseBagById(request.surpriseBagId());
 
 		    if ( surpriseBag.availableCount() <= 0 ) {
+		    	log.warn("Surprise bag {} is not available", request.surpriseBagId());
 		        throw new IllegalStateException(SURPRISE_BAG_NOT_AVAILABLE);
 		    }
 		    if (request.quantity() <= 0) {
+		    	 log.warn("Invalid quantity: {}", request.quantity());
 		        throw new IllegalArgumentException(INVALID_QUANTITY);
 		    }
 		    
@@ -53,7 +60,7 @@ public class OrderServiceImpl implements OrderService {
 			    new QuantityUpdateRequest(request.quantity())
 			);
 		orderRepository.save(order);
-		
+		log.info("Order created with ID: {}", order.getId());
 		return mapToResponse(order);
 	}
 
@@ -87,10 +94,16 @@ public class OrderServiceImpl implements OrderService {
 	 @Override
 	 @Transactional
 	 public void cancelOrder(UUID orderId) {
+		 log.info("Cancelling order with ID: {}", orderId);
+		 
 	     Order order = orderRepository.findById(orderId)
-	             .orElseThrow(() -> new IllegalArgumentException(ORDER_NOT_FOUND));
+	    		 .orElseThrow(() -> {
+	                 log.error("Order not found: {}", orderId);
+	                 return new IllegalArgumentException(ORDER_NOT_FOUND);
+	             });
 
 	     if (order.getStatus() == OrderStatus.CANCELLED) {
+	    	 log.warn("Order {} is already cancelled", orderId);
 	         throw new IllegalStateException(ORDER_ALREADY_CANCELLED);
 	     }
 
@@ -103,6 +116,7 @@ public class OrderServiceImpl implements OrderService {
 	    		);
 	     
 	     orderRepository.save(order);
+	     log.info("Order {} cancelled successfully", orderId);
 	 }
 
 }
