@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class JacksonConfig {
 
 	@Bean
-    public Jackson2ObjectMapperBuilderCustomizer jacksonCustomizer() {
+     Jackson2ObjectMapperBuilderCustomizer jacksonCustomizer() {
         return builder -> builder.deserializerByType(java.time.LocalDateTime.class, new MultiFormatDateTimeDeserializer());
     }
 }
