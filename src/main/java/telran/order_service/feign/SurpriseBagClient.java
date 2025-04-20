@@ -15,12 +15,12 @@ import telran.order_service.dto.SurpriseBagResponse;
 @FeignClient(name = "surprise-bag", url = "${surprise-bag.url}")
 public interface SurpriseBagClient {
 
-	@GetMapping("/surprise_bag/{id}")
+	@GetMapping("/internal/surprise-bag/{id}")
     SurpriseBagResponse getSurpriseBagById(@PathVariable UUID id);
 	
-	@PutMapping("/surprise_bag/{id}/increment")
+	@PutMapping("/internal/surprise-bag/increment/{id}")
 	void incrementAvailableCount(@PathVariable UUID id, @RequestBody QuantityUpdateRequest request);
 	
-	@PutMapping("/surprise_bag/{id}/decrement")
+	@PutMapping("/internal/surprise-bag/decrement/{id}")
 	void decrementAvailableCount(@PathVariable UUID id, @RequestBody QuantityUpdateRequest request);
 }
